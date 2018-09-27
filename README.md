@@ -4,6 +4,8 @@ Paradrop Traffic Camera
 This demo chute uses an OpenCV cascade classifier to detect and count
 vehicles in images from a camera mounted on a street pole.
 
+![Screenshot](screenshot.png)
+
 Requirements
 ------------
 
