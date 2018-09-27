@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Traffic Camera Analysis</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/epoch.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/d3.v3.min.js"></script>
+    <script src="/js/epoch.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Traffic Camera Analysis</h1>
+      <p>This demo application uses an OpenCV cascade classifier to detect and
+      count vehicles in images from a camera mounted on a street pole. The
+      video feed we used for this demo may change its view abruptly angle from
+      time to time.</p>
+      <div class="text-center">
+        <img id="markedImage" class="img-fluid" src="/output/marked.jpg" />
+      </div>
+      <h2>Vehicle Counts</h2>
+      <p>The chart below shows estimated vehicle counts over time. Due to the
+      way the demo is implemented, the x-axis uses the time that the image was
+      processed by the vehicle detector, which is different from the time the
+      image was taken.</p>
+      <div class="text-center">
+        <div id="countChart" class="epoch category10" style="height: 200px;"></div>
+      </div>
+    </div>
+    <script src="/js/traffic_camera.js"></script>
+  </body>
+</html>
