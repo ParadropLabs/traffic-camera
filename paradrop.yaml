@@ -1,0 +1,16 @@
+description: |
+  This chute uses an OpenCV cascade classifier to detect and count
+  vehicles in images from a camera mounted on a street pole.
+name: traffic-camera
+services:
+  main:
+    command: python2 -u -m chute
+    image: python2-cv
+    source: .
+    type: light
+    environment:
+      IMAGE_SOURCE_URL: http://paradrop.io:7466/park/video.jpg
+version: 1
+web:
+  port: 5000
+  service: main
