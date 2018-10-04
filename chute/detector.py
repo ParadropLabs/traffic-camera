@@ -19,13 +19,12 @@ SAVE_FRAMES_DIR = os.environ.get("SAVE_FRAMES_DIR", None)
 IMAGE_SOURCE_URL = os.environ.get("IMAGE_SOURCE_URL", "http://localhost:7466/park/video.jpg")
 
 # File to load with cascade parameters.
-DEFAULT_CASCADE_FILE = os.path.join(INSTALL_DIR, "cascade.xml")
-CASCADE_FILE = os.environ.get("CASCADE_FILE", DEFAULT_CASCADE_FILE)
+CASCADE_FILE = os.environ.get("CASCADE_FILE", "vehicle.xml")
+CASCADE_FILE = os.path.join(INSTALL_DIR, CASCADE_FILE)
 
 # The optional mask file is used to ignore detections in certain regions of
 # the frame. It should be a grayscale image with valid regions in white.
-DEFAULT_MASK_FILE = os.path.join(INSTALL_DIR, "masks", "park.png")
-MASK_FILE = os.environ.get("MASK_FILE", DEFAULT_MASK_FILE)
+MASK_FILE = os.environ.get("MASK_FILE", None)
 
 # Maximum length of history to keep (e.g. one hour of counts).
 MAX_HISTORY_LENGTH = int(os.environ.get("MAX_HISTORY_LENGTH", 3600))
@@ -34,7 +33,7 @@ PARADROP_DATA_DIR = os.environ.get("PARADROP_DATA_DIR", "/tmp")
 
 
 try:
-    mask = cv2.imread(MASK_FILE)
+    mask = cv2.imread(os.path.join(INSTALL_DIR, MASK_FILE))
     mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
 except:
     mask = None
@@ -117,24 +116,24 @@ def run_detector():
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Run the detector.
-        cars = cascade.detectMultiScale(gray, 1.1, 1)
+        detections = cascade.detectMultiScale(gray, 1.1, 1)
 
         # Filter out masked and overlapping objects.
-        cars = remove_masked(cars)
-        cars = remove_overlaps(cars)
+        detections = remove_masked(detections)
+        detections = remove_overlaps(detections)
 
         # Annotate image with bounding boxes.
-        for (x,y,w,h) in cars:
+        for (x,y,w,h) in detections:
             cv2.rectangle(img, (x,y), (x+w,y+h), (0,0,255), 2)
 
         # Save the marked image.
         path = os.path.join(PARADROP_DATA_DIR, "marked.jpg")
         cv2.imwrite(path, img)
 
-        # Append the car count and maintain maximum length.
+        # Append the detection count and maintain maximum length.
         counts.append({
             "time": timestamp,
-            "count": len(cars)
+            "count": len(detections)
         })
         counts = counts[-MAX_HISTORY_LENGTH:]
 
