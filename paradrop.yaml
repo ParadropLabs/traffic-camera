@@ -8,10 +8,8 @@ environment:
   MASK_FILE: masks/park.png
 services:
   main:
-    command: python2 -u -m chute
-    image: python2-cv
     source: .
-    type: light
+    type: normal
 version: 1
 web:
   port: 5000
